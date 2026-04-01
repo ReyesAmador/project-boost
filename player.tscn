@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://b5vvcmle4nqtm"]
+
+[ext_resource type="Script" uid="uid://c3gel4vrab8g3" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="AudioStream" uid="uid://ciqkmh7uuirk8" path="res://assets/SFX - Death Explosion.ogg" id="2_onrkg"]
+[ext_resource type="AudioStream" uid="uid://b51pig2qhvjqc" path="res://assets/SFX - Success.ogg" id="3_i3pqv"]
+[ext_resource type="AudioStream" uid="uid://cotn6i5o52ugp" path="res://assets/SFX - Main engine thrust.ogg" id="4_hqtel"]
+[ext_resource type="PackedScene" uid="uid://ux6ivcx1ovdp" path="res://assets/Particles/booster_particles.tscn" id="5_sweqy"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sweqy"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4flbx"]
+
+[node name="Player" type="RigidBody3D" unique_id=1533196409]
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+contact_monitor = true
+max_contacts_reported = 10
+linear_damp = 1.0
+angular_damp = 3.0
+script = ExtResource("1_4flbx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1490870157]
+mesh = SubResource("CylinderMesh_sweqy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1962571614]
+shape = SubResource("CylinderShape3D_4flbx")
+
+[node name="ExplosionAudio" type="AudioStreamPlayer" parent="." unique_id=1204274675]
+stream = ExtResource("2_onrkg")
+
+[node name="SuccessAudio" type="AudioStreamPlayer" parent="." unique_id=1292234398]
+stream = ExtResource("3_i3pqv")
+
+[node name="RocketAudio" type="AudioStreamPlayer3D" parent="." unique_id=30142995]
+stream = ExtResource("4_hqtel")
+
+[node name="BoosterParticles" parent="." unique_id=16435161 instance=ExtResource("5_sweqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="LeftBoosterParticles" parent="." unique_id=366983817 instance=ExtResource("5_sweqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -1, 0)
+
+[node name="RightBoosterParticles" parent="." unique_id=387944873 instance=ExtResource("5_sweqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -1, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
