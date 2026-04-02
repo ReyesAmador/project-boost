@@ -12,6 +12,8 @@ extends RigidBody3D
 @onready var booster_particles: GPUParticles3D = $BoosterParticles
 @onready var right_booster_particles: GPUParticles3D = $RightBoosterParticles
 @onready var left_booster_particles: GPUParticles3D = $LeftBoosterParticles
+@onready var explosion_particles: GPUParticles3D = $ExplosionParticles
+@onready var success_particles: GPUParticles3D = $SuccessParticles
 
 var is_transitioning: bool = false
 
@@ -37,6 +39,9 @@ func _process(delta: float) -> void:
 		left_booster_particles.emitting = true
 	else:
 		left_booster_particles.emitting = false
+	
+	if Input.is_action_just_pressed("ui_cancel"):
+		get_tree().quit()
 
 
 func _on_body_entered(body: Node) -> void:
@@ -49,6 +54,7 @@ func _on_body_entered(body: Node) -> void:
 		
 func crash_sequence() -> void:
 	print("BoOoM")
+	explosion_particles.emitting = true
 	explosion_audio.play()
 	set_process(false)
 	is_transitioning = true
@@ -57,6 +63,7 @@ func crash_sequence() -> void:
 	tween.tween_callback(get_tree().reload_current_scene)
 	
 func complete_level(next_level_file: String) -> void:
+	success_particles.emitting = true
 	success_audio.play()
 	set_process(false)
 	is_transitioning = true
